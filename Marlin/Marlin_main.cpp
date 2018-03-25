@@ -8166,7 +8166,7 @@ inline void gcode_M111() {
     for (uint8_t i = 0; i < COUNT(debug_strings); i++) {
       if (TEST(marlin_debug_flags, i)) {
         if (comma++) SERIAL_CHAR(',');
-        serialprintPGM((char*)pgm_read_ptr(&debug_strings[i]));
+        serialprintPGM((char*)pgm_read_word(&debug_strings[i]));
       }
     }
   }
@@ -11590,11 +11590,11 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
               hotend_offset[Y_AXIS][tmp_extruder] - hotend_offset[Y_AXIS][active_extruder]
             };
 
-            #if HAS_MESH
+            #if ENABLED(MESH_BED_LEVELING)
 
               if (planner.leveling_active) {
                 #if ENABLED(DEBUG_LEVELING_FEATURE)
-                  if (DEBUGGING(LEVELING)) SERIAL_ECHOPAIR("Z before: ", current_position[Z_AXIS]);
+                  if (DEBUGGING(LEVELING)) SERIAL_ECHOPAIR("Z before MBL: ", current_position[Z_AXIS]);
                 #endif
                 float x2 = current_position[X_AXIS] + xydiff[X_AXIS],
                       y2 = current_position[Y_AXIS] + xydiff[Y_AXIS],
@@ -11608,7 +11608,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
                 #endif
               }
 
-            #endif // HAS_MESH
+            #endif // MESH_BED_LEVELING
 
           #endif // !HAS_ABL
 
